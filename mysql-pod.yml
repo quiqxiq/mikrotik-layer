@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: docker.io/library/mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: r00t
+      MYSQL_DATABASE: mikrobill
+    ports:
+      - "3306:3306"
+    volumes:
+      # Menyimpan data agar tidak hilang
+      - mysql_data:/var/lib/mysql
+      # Menjalankan file init.sql saat pertama kali start
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro, Z
+    networks:
+      - mikrobill_net
+
+volumes:
+  mysql_data:
+
+networks:
+  mikrobill_net:
+    driver: bridge
